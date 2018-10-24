@@ -10,8 +10,8 @@ with open("/usr/lib/scratch2/scratch_extensions/extensions.json") as extensionsF
 for e in extensions:
     if e["name"] == "MCPi-Scratch":
         # already exists!
-        print("Entry already exists in /usr/lib/scratch2/scratch_extensions/extensions.json. If you're upgrading from an existing install, this is fine!")
-        sys.exit(0)
+        print("Entry for MCPi-Scratch already exists in /usr/lib/scratch2/scratch_extensions/extensions.json - deleting existing entry.")
+        extensions.remove(e)  # delete existing entry
 
 extensions.append({
     "name": "MCPi-Scratch",
@@ -19,8 +19,9 @@ extensions.append({
     "file": "mcpi-scratch.js",
     "url" : "https://denosawr.github.io/mcpi-scratch/",
     "tags": ["software"],
-    "md5" : "mcpi-scratch.png"
-    })
+    "md5" : "mcpi-scratch.png"  # I think this is supposed to be an MD5 hash,
+                                # but this format is used by existing extensions
+})
 
 with open("/usr/lib/scratch2/scratch_extensions/extensions.json", "w") as extensionsFile:
     extensionsFile.write(json.dumps(extensions))
