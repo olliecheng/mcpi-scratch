@@ -74,9 +74,9 @@ var global_callback;
             ["w", "left %n blocks", "playerLeft", "1"],
             ["w", "backwards %n blocks", "playerBackward", "1"],
             ["w", "right %n blocks", "playerRight", "1"],
-            ["R", "get position x", "getPosX"],
-            ["R", "get position y", "getPosY"],
-            ["R", "get position z", "getPosZ"]
+            ["R", "player x", "getPosX"],
+            ["R", "player y", "getPosY"],
+            ["R", "player z", "getPosZ"]
         ],
         menus: {
             blockTypes: [
