@@ -3,7 +3,7 @@
 INSTALLDIR=$1
 
 if [ -z "$1" ]; then
-   INSTALLDIR="~/Documents/MCPiScratch"
+   INSTALLDIR=~/Documents/MCPiScratch
 fi
 
 if [ -d "$INSTALLDIR" ]; then
