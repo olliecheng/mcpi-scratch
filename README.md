@@ -1,37 +1,29 @@
-## Welcome to GitHub Pages
+# mcpi-scratch
+**Program RaspberryJuice and Minecraft: Pi Edition through Scratch 2.0!**
 
-You can use the [editor on GitHub](https://github.com/denosawr/mcpi-scratch/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+MCPi-Scratch is a Scratch extension and client application which allows for control of Minecraft: Pi Edition and Bukkit servers with the RaspberryJuice plugin, through Scratch.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+## Installation
+On a stock Raspberry Pi (or other Debian/Ubuntu machine), this command should install mcpi-scratch:
+```sh
+curl https://github.com/denosawr/mcpi-scratch/install.sh | sh
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+Otherwise, to install on another machine, make sure you have Python 2 and pip installed. Then, `git clone` this repo, install all relevant packages (`pip install -r requirements.txt`). Then, to get started, run the Python backend (`python mcpi-scratch.py`) and install the Scratch extension.
 
-### Jekyll Themes
+## Implemented features
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/denosawr/mcpi-scratch/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+MCPi-Scratch exposes a few new blocks to Scratch.
+* get block at (`<X>`, `<Y>`, `<Z>`) -> returns `<block type>`
+* set block at (`<X>`, `<Y>`, `<Z>`) to `<block type>`
+* stood on block -> returns `<block type>`
+* post `<message>` to chat
+* set player position to (`<X>`, `<Y>`, `<Z>`)
+* forward/back/left/right <n> blocks
+* get position x/y/z -> returns `<position along X/Y/Z axis>`
 
-### Support or Contact
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+## Behind the scenes
+
+Currently, MCPi-Scratch's server app (Python) is a Flask webserver. A goal is to eventually shift this to using websockets, which should be faster.
+
