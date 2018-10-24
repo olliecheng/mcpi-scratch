@@ -25,7 +25,7 @@ pip install --quiet --user -r requirements.txt
 
 echo "Installing extensions to Scratch..."
 sudo python installfiles/modifyExtensionsJson.py
-sudo mv installfiles/mcpi-scratch.png /usr/lib/scratch2/medialibrarythumbnails
-sudo mv mcpi-scratch.js /usr/lib/scratch2/scratch_extensions
+sudo cp -f installfiles/mcpi-scratch.png /usr/lib/scratch2/medialibrarythumbnails
+sudo cp -f mcpi-scratch.js /usr/lib/scratch2/scratch_extensions
 
 echo "Complete! Use the launcher to get started."

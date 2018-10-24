@@ -15,10 +15,10 @@ for e in extensions:
 
 extensions.append({
     "name": "MCPi-Scratch",
-    "type": "extensions",
+    "type": "extension",
     "file": "mcpi-scratch.js",
     "url" : "https://denosawr.github.io/mcpi-scratch/",
-    "tags": [],
+    "tags": ["software"],
     "md5" : "mcpi-scratch.png"
     })
 
