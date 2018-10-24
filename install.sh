@@ -6,13 +6,6 @@ if [ -z "$1" ]; then
    INSTALLDIR="~/Documents/MCPiScratch"
 fi
 
-if [ -d "$INSTALLDIR" ]; then
-  # Control will enter here if $DIRECTORY exists.
-    echo "Directory $INSTALLDIR already exists! Remove it first."
-    exit 1
-fi
-
-
 echo "Installing Python and Pip, if not already installed..."
 sudo apt install python python-pip -y > /dev/null
 
