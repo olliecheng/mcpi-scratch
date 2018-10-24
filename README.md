@@ -21,3 +21,8 @@ MCPi-Scratch exposes a few new blocks to Scratch.
 * set player position to (`<X>`, `<Y>`, `<Z>`)
 * forward/back/left/right <n> blocks
 * get position x/y/z -> returns `<position along X/Y/Z axis>`
+
+
+## Behind the scenes
+
+Currently, MCPi-Scratch's server app (Python) is a Flask webserver. A goal is to eventually shift this to using websockets, which should be faster.
