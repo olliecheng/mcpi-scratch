@@ -3,15 +3,24 @@
 
 MCPi-Scratch is a Scratch extension and client application which allows for control of Minecraft: Pi Edition and Bukkit servers with the RaspberryJuice plugin, through Scratch.
 
-## Installation
-On a stock Raspberry Pi (or other Debian/Ubuntu machine), this command should install mcpi-scratch:
+## Installation on Raspberry Pi
+On a stock Raspberry Pi running Raspbian, this command should install mcpi-scratch:
 ```sh
 curl https://raw.githubusercontent.com/denosawr/mcpi-scratch/master/install.sh | sh
 ```
 
 If you want to install the bleeding-edge version on the `develop` branch, instead use: `curl https://raw.githubusercontent.com/denosawr/mcpi-scratch/master/install-develop.sh | sh`
 
+When all that's done, open Scratch, click More Blocks, click Add an Extension and select MCPi-Scratch! You should see the blocks appear after clicking OK.
+
+**Note that on any other Linux distro, or macOS or Windows, this will not work. Raspbian has a special version of Scratch distributed with it, which allows for custom extension installation. It's highly recommended that you use ScratchX.**
+
 Otherwise, to install on another machine, make sure you have Python 2 and pip installed. Then, `git clone` this repo, install all relevant packages (`pip install -r requirements.txt`). Then, to get started, run the Python backend (`python mcpi-scratch.py`) and install the Scratch extension.
+
+## Installation on ScratchX
+ScratchX is an official custom version of Scratch 2.0 which supports JavaScript extensions. [Fire up ScratchX](https://scratchx.org/#scratch), head to More Blocks and tap on "Load Experimental Extension". Paste `https://denosawr.github.io/mcpi-scratch/mcpi-scratch.js` into the `paste url...` box, click Open, and the blocks should appear.
+
+**TODO**: setting up server & stuff
 
 ## Implemented features
 
