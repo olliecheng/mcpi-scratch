@@ -6,8 +6,10 @@ MCPi-Scratch is a Scratch extension and client application which allows for cont
 ## Installation
 On a stock Raspberry Pi (or other Debian/Ubuntu machine), this command should install mcpi-scratch:
 ```sh
-curl https://github.com/denosawr/mcpi-scratch/install.sh | sh
+curl https://raw.githubusercontent.com/denosawr/mcpi-scratch/install.sh | sh
 ```
+
+If you want to install the bleeding-edge version on the `develop` branch, instead use: `curl https://raw.githubusercontent.com/denosawr/mcpi-scratch/install-develop.sh`
 
 Otherwise, to install on another machine, make sure you have Python 2 and pip installed. Then, `git clone` this repo, install all relevant packages (`pip install -r requirements.txt`). Then, to get started, run the Python backend (`python mcpi-scratch.py`) and install the Scratch extension.
 
