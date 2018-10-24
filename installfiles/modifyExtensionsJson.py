@@ -16,9 +16,10 @@ for e in extensions:
 extensions.append({
     "name": "MCPi-Scratch",
     "type": "extensions",
-    "file": "mcpi-scratch.png",
+    "file": "mcpi-scratch.js",
     "url" : "https://denosawr.github.io/mcpi-scratch/",
-    "tags": []
+    "tags": [],
+    "md5" : "mcpi-scratch.png"
     })
 
 with open("/usr/lib/scratch2/scratch_extensions/extensions.json", "w") as extensionsFile:
