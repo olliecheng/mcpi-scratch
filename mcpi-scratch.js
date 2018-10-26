@@ -12,12 +12,49 @@ var global_callback;
 
 
 (function(ext) {
+    ext.running = true;
+    function connect() {
+        if (window.socket.readyState != window.socket.OPEN) {
+            window.socket.close();
+            window.socket = new WebSocket("ws://127.0.0.1:9095");
+            window.socket.onMessage = socketOnMessage;
+        }
+    }
+
+    function connectTimeoutLoop() {
+        if (!ext.running) {
+            return;
+        }
+        connect();
+        setTimeout(connectTimeoutLoop, 3000); // every second, connect if not connected already
+    }
+    
+    function socketOnMessage (message) {
+        var msg = JSON.parse(message.data);
+        console.log(msg)
+    };
+
+    window.socket = new WebSocket("ws://127.0.0.1:9095");
+    window.socket.onMessage = socketOnMessage;
+    connectTimeoutLoop();
+
     function sendToServer(functionName, args) {
         var msg = JSON.stringify({
             "function": functionName,
             "args": args
         });
-        $.ajax({
+        if (window.socket.readyState != window.socket.OPEN) {
+            // not connected to server :(
+            
+            if (global_callback) {
+                global_callback();
+                global_callback = undefined;
+            }
+            
+            return;
+        }
+        window.socket.send(msg);
+        /*$.ajax({
             type: "POST",
             url: "http://127.0.0.1:9095/command",
             data: msg,
@@ -34,7 +71,7 @@ var global_callback;
                     global_callback = undefined;
                 }
             }
-        });
+        });*/
     }
 
     function createSendToServerFunctionWithCallback(functionName) {
@@ -49,12 +86,19 @@ var global_callback;
 
 
     // Cleanup function when the extension is unloaded
-    ext._shutdown = function() {};
+    ext._shutdown = function() {
+        ext.running = false;
+    };
 
     // Status reporting code
     // Use this to report missing hardware, plugin or unsupported browser
     ext._getStatus = function() {
-        return {status: 2, msg: 'Ready'};
+        if (window.socket.readyState == window.socket.OPEN) {
+            return {status: 2, msg: "Ready!"}
+        } else {
+            return {status: 1, msg: "Server not running."}
+        }
+        // return {status: 2, msg: 'Ready'};
     };
 
     // Now, we create a property of ext for each of MCPI_FUNCTIONS

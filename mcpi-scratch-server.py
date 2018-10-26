@@ -113,6 +113,7 @@ def processCommand():
 	data = json.loads(request.form.to_dict().keys()[0])
 	function = data["function"]
 
+	# python 2 unicode bug - Python3 should fix it
 	try:
 		args = [str(x) for x in data["args"]]
 	except UnicodeEncodeError:
