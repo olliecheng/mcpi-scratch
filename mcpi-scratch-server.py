@@ -8,7 +8,7 @@ from SimpleWebSocketServer import SimpleWebSocketServer, WebSocket
 
 
 MCPI_FUNCTIONS = [
-	"getBlock", "setBlock", "standingOnBlock", "postToChat", "setPos", "postToChat"
+	"getBlock", "setBlock", "standingOnBlock", "postToChat", "setPos", "postToChat",
 	"playerForward", "playerBackward", "playerLeft", "playerRight",
 	"playerUp", "playerDown", "getPosX", "getPosY", "getPosZ"
 ]  # name of functions from JS
@@ -67,9 +67,10 @@ class ConversionFunctions:
 
 	@staticmethod
 	def movePlayer(direction, amount):
-		# type: string \in ["forward", "backward", "right", "left", "up", "down"], int -> None
+		# type: string \in ["forward", "backward", "right", "left", "up", "down"], float -> None
 		"Moves the player in a certain direction (along the 2D xz plane) a scalar amount."
 
+		amount = float(amount)
 		position = mc.player.getPos()
 		if direction == "forward": position.x += amount
 		elif direction == "backward": position.x -= amount
@@ -97,32 +98,35 @@ class MCPiScratchServer(WebSocket):
 	connections = 0
 
 	def handleMessage(self):
-		data = json.loads(self.data)
-		function = data["function"]
-
-		# python 2 unicode / mcpi bug - Python3 should fix it
 		try:
-			args = [str(x) for x in data["args"]]
-		except UnicodeEncodeError:
-			print("Currently, MCPi has a bug in where Unicode strings " + \
-				"(such as an accented letter) are not supported.")
-			return
-			# MCPi bug - passing through a unicode string will cause a recursion error.
+			data = json.loads(self.data)
+			function = data["function"]
 
-		if function not in MCPI_FUNCTIONS:
-			print("Function %s nonexistent." % function)
-			return "Function doesn't exist.", 404
+			# python 2 unicode / mcpi bug - Python3 should fix it
+			try:
+				args = [str(x) for x in data["args"]]
+			except UnicodeEncodeError:
+				print("Currently, MCPi has a bug in where Unicode strings " + \
+					"(such as an accented letter) are not supported.")
+				return
+				# MCPi bug - passing through a unicode string will cause a recursion error.
 
-		if function.startswith("player"):
-			ret = ConversionFunctions.movePlayer(function[6:].lower(), args[0])
-		elif function.startswith("getPos"):
-			ret = ConversionFunctions.getPosition(function[-1].lower())
-		else:
-			ret = getattr(ConversionFunctions, function)(*args)
+			if function not in MCPI_FUNCTIONS:
+				print("Function %s nonexistent." % function)
+				return "Function doesn't exist.", 404
 
-		# ret should be empty/null if the calling function is not a reporter! else String
-		ret = str(ret)
-		self.sendMessage(ret)
+			if function.startswith("player"):
+				ret = ConversionFunctions.movePlayer(function[6:].lower(), args[0])
+			elif function.startswith("getPos"):
+				ret = ConversionFunctions.getPosition(function[-1].lower())
+			else:
+				ret = getattr(ConversionFunctions, function)(*args)
+
+			# ret should be empty/null if the calling function is not a reporter! else String
+			ret = str(ret)
+			self.sendMessage(ret)
+		except:
+			__import__("traceback").print_exc()
 
 
 	def handleConnected(self):
