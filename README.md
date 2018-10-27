@@ -6,12 +6,12 @@ MCPi-Scratch is a Scratch extension and client application which allows for cont
 ## Installation on Raspberry Pi
 On a stock Raspberry Pi running Raspbian, this command should install mcpi-scratch:
 ```sh
-curl https://denosawr.github.io/mcpi-scratch/install.sh | sh
+curl -s https://denosawr.github.io/mcpi-scratch/install.sh | sh
 ```
 
-If you want to install the bleeding-edge version on the `develop` branch, instead use: `curl https://denosawr.github.io/mcpi-scratch/install.sh | sh -s <branch (e.g. develop) <folder to clone to>>`
+If you want to install the bleeding-edge version on the `develop` branch, instead use: `curl -s https://denosawr.github.io/mcpi-scratch/install.sh | sh -s <branch (e.g. develop) <folder to clone to>>`
 
-When all that's done, open Scratch, click More Blocks, click Add an Extension and select MCPi-Scratch! You should see the blocks appear after clicking OK.
+When all that's done, open Scratch, click More Blocks, click Add an Extension and select MCPi-Scratch! You should see the blocks appear after clicking OK. On your desktop should be an executable; double click it to launch the server.
 
 **Note that on any other Linux distro, or macOS or Windows, this will not work. Raspbian has a special version of Scratch distributed with it, which allows for custom extension installation. It's highly recommended that you use ScratchX.**
 
