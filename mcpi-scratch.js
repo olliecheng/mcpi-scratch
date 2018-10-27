@@ -2,42 +2,87 @@
 //
 
 
-const MCPI_FUNCTIONS_ASYNC = [
+// These are all the functions available from Scratch. Note that all of them run 'async' - that is, have a callback.
+var MCPI_FUNCTIONS_ASYNC = [
     "getBlock", "setBlock", "postToChat", "setPos", "standingOnBlock",
     "playerForward", "playerBackward", "playerLeft", "playerRight",
-    "getPosX", "getPosY", "getPosZ"
-]
+    "playerUp", "playerDown", "getPosX", "getPosY", "getPosZ"
+] // note that this _can_ be const, but that means that removing and re-adding the plugin may cause issues
 
+// declare a global callback which will be updated and called
 var global_callback;
 
 
 (function(ext) {
+    //  init some variables
     ext.running = true;
+    ext.reader = new FileReader();
+
+
+
+    // cleanup function when the extension is unloaded
+    ext._shutdown = function() {
+        ext.running = false;  // so connectTimeoutLoop can harmessly stop
+    };
+
+    // change the status
+    ext._getStatus = function() {
+        if (window.socket.readyState == window.socket.OPEN) {  // ws connected
+            return {status: 2, msg: "Ready!"}
+        } else {  // ws not connected/connecting; connecting should be practically instantaneous
+            return {status: 1, msg: "Server not running."}
+        }
+    };
+
+
+
+    // connect to WebSocket
     function connect() {
         if (window.socket.readyState != window.socket.OPEN) {
             window.socket.close();
             window.socket = new WebSocket("ws://127.0.0.1:9095");
-            window.socket.onMessage = socketOnMessage;
+            window.socket.onmessage = socketOnMessage;
         }
     }
 
+    // calls connect() periodically to allow auto-connect
     function connectTimeoutLoop() {
         if (!ext.running) {
+            // if the plugin has been removed, stop connecting to ws
             return;
         }
+
         connect();
-        setTimeout(connectTimeoutLoop, 3000); // every second, connect if not connected already
+        setTimeout(connectTimeoutLoop, 3000); // every 3 seconds, connect if not connected already
     }
-    
+
+
+
+    // Message recieve actions
+    ext.reader.addEventListener('loadend', (e) => {
+        // reader.readAsText(data) will call this function
+        const msg = e.srcElement.result;
+
+        global_callback(msg);
+        global_callback = undefined;
+        return;
+      });
+
     function socketOnMessage (message) {
-        var msg = JSON.parse(message.data);
-        console.log(msg)
+        // function to be called when ws recieves data
+        ext.reader.readAsText(message.data);
     };
 
+
+
+    // create WebSocket. note we can't call connect() because right now window.socket == undefined.
     window.socket = new WebSocket("ws://127.0.0.1:9095");
-    window.socket.onMessage = socketOnMessage;
+    window.socket.onmessage = socketOnMessage;
     connectTimeoutLoop();
 
+
+
+    // function to call to send data to server
     function sendToServer(functionName, args) {
         var msg = JSON.stringify({
             "function": functionName,
@@ -45,68 +90,40 @@ var global_callback;
         });
         if (window.socket.readyState != window.socket.OPEN) {
             // not connected to server :(
-            
+            // immediately call global_callback and quit
             if (global_callback) {
                 global_callback();
                 global_callback = undefined;
             }
-            
             return;
         }
-        window.socket.send(msg);
-        /*$.ajax({
-            type: "POST",
-            url: "http://127.0.0.1:9095/command",
-            data: msg,
-            failure: function(data) {
-                if (global_callback) {
-                    global_callback();
-                    global_callback = undefined;
-                }
-            },
-            success: function(data) {
-                console.log("success");
-                if (global_callback) {
-                    global_callback(data);
-                    global_callback = undefined;
-                }
-            }
-        });*/
+        window.socket.send(msg);  // send payload
     }
 
+
+
+    // create a wrapper function around sendToServer which updates global_callback
+    // this is being done in case non-async functions are ever used, which don't have a callback
+    // the callback function should be passed _last_
     function createSendToServerFunctionWithCallback(functionName) {
         return function(a,b,c,d,e) {
-            var targs = [a, b, c, d, e].filter(function(n) {return n}),
-                args = targs.splice(0, targs.length - 1),
-                callback = targs.splice(-1)[0];
+            var targs = [a, b, c, d, e].filter(function(n) {return n}),  // [1,2,3,undefined,undefined] -> [1,2,3]
+                args = targs.splice(0, targs.length - 1),                // [1,2,3] -> [1,2]
+                callback = targs.splice(-1)[0];                          // [1,2,3] -> [3]
             global_callback = callback;
             sendToServer(functionName, args);
         }
     }
 
-
-    // Cleanup function when the extension is unloaded
-    ext._shutdown = function() {
-        ext.running = false;
-    };
-
-    // Status reporting code
-    // Use this to report missing hardware, plugin or unsupported browser
-    ext._getStatus = function() {
-        if (window.socket.readyState == window.socket.OPEN) {
-            return {status: 2, msg: "Ready!"}
-        } else {
-            return {status: 1, msg: "Server not running."}
-        }
-        // return {status: 2, msg: 'Ready'};
-    };
-
     // Now, we create a property of ext for each of MCPI_FUNCTIONS
     for (var i=0; i<MCPI_FUNCTIONS_ASYNC.length; i++) {
+        // for each MCPI_FUNCTION wrap it around sendToServer
         ext[MCPI_FUNCTIONS_ASYNC[i]] = createSendToServerFunctionWithCallback(MCPI_FUNCTIONS_ASYNC[i]);
     }
 
-    // Block and block menu descriptions
+
+
+    // Scratch stuff - specify blocks and menus to be used by the extension
     var descriptor = {
         blocks: [
             ["R", "get block at ( %n, %n, %n )", "getBlock", "0", "0", "0"],
@@ -118,6 +135,8 @@ var global_callback;
             ["w", "left %n blocks", "playerLeft", "1"],
             ["w", "backwards %n blocks", "playerBackward", "1"],
             ["w", "right %n blocks", "playerRight", "1"],
+            ["w", "fly up %n blocks", "playerUp", "1"],
+            ["w", "fly down %n blocks", "playerDown", "1"],
             ["R", "player x", "getPosX"],
             ["R", "player y", "getPosY"],
             ["R", "player z", "getPosZ"]
@@ -137,7 +156,6 @@ var global_callback;
             ]
         }
     };
-
 
     // Register the extension
     ScratchExtensions.register('MCPi Scratch', descriptor, ext);
