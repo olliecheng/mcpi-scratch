@@ -1,9 +1,14 @@
 #!/bin/bash
 
-INSTALLDIR=$1
+INSTALLDIR=$2
+BRANCH=$1
+
+if [ -z "$2" ]; then
+   INSTALLDIR=~/Documents/MCPiScratch
+fi
 
 if [ -z "$1" ]; then
-   INSTALLDIR=~/Documents/MCPiScratch
+    BRANCH="master"
 fi
 
 if [ -d "$INSTALLDIR" ]; then
@@ -17,7 +22,7 @@ echo "Installing Python and Pip, if not already installed..."
 sudo apt-get install python python-pip -y > /dev/null
 
 echo "Cloning MCPi-Scratch to folder from https://github.com/denosawr/MCPi-scratch..."
-git clone --quiet https://github.com/denosawr/MCPi-Scratch.git $INSTALLDIR
+git clone --quiet https://github.com/denosawr/MCPi-Scratch.git $INSTALLDIR --branch $BRANCH
 cd $INSTALLDIR
 
 echo "Installing requirements..."
