@@ -1,6 +1,21 @@
-// Here are the different functions which can be passed through to the Python script.
-//
+/*
+    This is part of MCPi-Scratch (https://github.com/denosawr/mcpi-scratch),
+    a bridge between MCPi/RaspberryJuice and Scratch.
+    Copyright (C) 2018 denosawr
 
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 // These are all the functions available from Scratch. Note that all of them run 'async' - that is, have a callback.
 var MCPI_FUNCTIONS_ASYNC = [
