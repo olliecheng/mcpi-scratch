@@ -19,7 +19,7 @@ When all that's done, open Scratch, click More Blocks, click Add an Extension an
 
 **WARNING: On Firefox, this plugin may not work. By default, Firefox doesn't allow plain unsecure websockets over HTTPS. Either use another browser (such as Chrome), or set `network.websocket.allowinsecurefromhttps` to true in `about:config`.**
 
-ScratchX is an official custom version of Scratch 2.0 which supports JavaScript extensions. [Fire up ScratchX](https://scratchx.org/#scratch), head to More Blocks and tap on "Load Experimental Extension". Paste `https://denosawr.github.io/mcpi-scratch/mcpi-scratch.js` into the `paste url...` box, click Open, and the blocks should appear.
+ScratchX is an official custom version of Scratch 2.0 which supports JavaScript extensions. [Fire up ScratchX](https://scratchx.org/#scratch), head to More Blocks and tap on "Load Experimental Extension". Paste `https://denosawr.github.io/mcpi-scratch/mcpi-scratch/mcpi-scratch.js` into the `paste url...` box, click Open, and the blocks should appear.
 
 To install the server, make sure you have Python 2 and pip installed.
 ```sh
